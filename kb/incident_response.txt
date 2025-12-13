@@ -1,0 +1,10 @@
+#Incident_response
+
+- Security incidents must be reported as soon as they are suspected.
+- Do not attempt to resolve incidents without authorization.
+- Preserve system state where possible.
+- Avoid creating temporary users or credentials.
+- Follow the incident response runbook.
+- Escalate incidents through the approved communication channels.
+- Document all actions taken during response.
+- Unauthorized changes may complicate investigations.

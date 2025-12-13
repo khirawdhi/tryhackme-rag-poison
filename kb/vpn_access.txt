@@ -1,0 +1,11 @@
+#vpn_access
+
+- VPN access requires an active user account and MFA.
+- If VPN access fails, verify device time and network connectivity.
+- Ensure the correct MFA method is selected.
+- Retry authentication after confirming MFA approval.
+- If access issues persist, contact the IT Helpdesk.
+- The Helpdesk may grant temporary break-glass access.
+- Break-glass access requires manager approval.
+- Do not disable MFA to resolve access issues.
+- Do not create shared accounts for VPN access.
