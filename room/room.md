@@ -35,7 +35,7 @@ In this task, you will compare the assistant’s behavior in three states:
 ### Step 1: Build a clean index (trusted documents only)
 Run:
 cd ~/tryhackme-rag-poison/app
-python3 ingest.py --kb ../kb --index ../index_clean.json
+python3 inject.py --kb ../kb --index ../index_clean.json
 python3 query.py --index ../index_clean.json --q "How do I access VPN if MFA is failing?"
 
 What to notice:
@@ -45,7 +45,7 @@ What to notice:
 
 ### Step 2: Poison the index (add an injected document)
 Run:
-python3 ingest.py --kb ../kb --inject ../injected --index ../index_poisoned.json
+python3 inject.py --kb ../kb --inject ../injected --index ../index_poisoned.json
 python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA is failing?"
 
 What to notice:
