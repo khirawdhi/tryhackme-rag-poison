@@ -22,7 +22,7 @@
 The diagram below shows a simplified RAG pipeline used by the assistant.
 The highlighted area indicates where a poisoned document enters the system.
 
-![RAG Data Poisoning Pipeline](imag/rag_poisoning_pipeline.drawio.png)
+![RAG Data Poisoning Pipeline](room/img/rag_poisoning_pipeline.drawio.png)
 
 ## Task 4: Hands-on Exercise – Poisoning the Retrieval (Practical)
 In this task, you will compare the assistant’s behavior in three states:
