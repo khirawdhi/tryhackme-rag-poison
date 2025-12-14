@@ -1,81 +1,132 @@
+# `room.md` (TryHackMe room)
+
+```markdown
 # RAG Data Poisoning: When Knowledge Bases Lie
 
-## Learning Objectives
-- Understand how RAG systems use external data
-- Demonstrate how poisoned documents can influence AI-generated responses
-- Identify indicators of untrusted or malicious retrieved content
-- Apply a simple mitigation to reduce RAG data poisoning risk
+---
 
-## Task 1: Scenario (Informative)
-- An internal AI assistant answers IT and security questions for employees
-- The assistant uses a knowledge base and retrieval before generating answers
-- A contractor uploads a document claiming to be a policy update
-- After ingestion, the assistant begins suggesting insecure actions
+## Task 1: Learning Objectives
 
-## Task 2: Technical Foundation (Informative)
-- RAG systems combine document retrieval with language model generation
-- Retrieval selects the top-k most similar documents for a query
-- The language model trusts retrieved content as context
-- If malicious data enters the knowledge base, answers can be manipulated
+In this room, you will learn how:
 
-## Task 3: RAG Pipeline Overview (Visual)
-The diagram below shows a simplified RAG pipeline used by the assistant.
-The highlighted area indicates where a poisoned document enters the system.
+- RAG systems retrieve and use external data
+- Poisoned documents can influence AI-generated responses
+- Untrusted retrieved content can be identified
+- Simple mitigations can reduce RAG data poisoning risk
 
-![RAG Data Poisoning Pipeline](img/rag_poisoning_pipeline.drawio.png)
+---
 
-## Task 4: Hands-on Exercise – Poisoning the Retrieval (Practical)
-In this task, you will compare the assistant’s behavior in three states:
-1) Clean knowledge base (trusted documents only)
-2) Poisoned knowledge base (trusted + injected document)
-3) Mitigated retrieval (trusted-only filter)
+## Task 2: Scenario
 
-> Tip: If your output differs slightly, focus on **which document ranked #1** and the `source=` field.
+An internal AI assistant answers IT and security questions for employees.
 
-### Step 1: Build a clean index (trusted documents only)
-Run:
+The assistant retrieves documents from a knowledge base before generating responses.
+
+A contractor uploads a document claiming to be a policy update.  
+After ingestion, the assistant begins suggesting insecure actions.
+
+---
+
+## Task 3: Technical Foundation
+
+Retrieval-Augmented Generation (RAG) systems combine:
+
+- **Retrieval** – selecting the most relevant documents
+- **Generation** – producing an answer using retrieved content
+
+The language model treats retrieved documents as trusted context.
+
+If malicious data enters the knowledge base, answers can be manipulated without modifying the model.
+
+---
+
+## Task 4: RAG Pipeline Overview
+
+The RAG pipeline follows this flow:
+
+User Query
+↓
+Document Retrieval (Top-K)
+↓
+Retrieved Context
+↓
+LLM Response
+
+
+Data poisoning occurs at the **ingestion and retrieval layer**, before generation.
+
+---
+
+## Task 5: Hands-on Exercise – Poisoning the Retrieval
+
+You will compare the assistant’s behavior in three states:
+
+1. Clean index (trusted documents only)
+2. Poisoned index (trusted + injected document)
+3. Mitigated retrieval (trusted-only filter)
+
+> Focus on which document ranks #1 and the `source=` field.
+
+---
+
+### Step 1: Build a Clean Index
+
+```bash
 cd ~/tryhackme-rag-poison/app
 python3 ingest.py --kb ../kb --index ../index_clean.json
 python3 query.py --index ../index_clean.json --q "How do I access VPN if MFA is failing?"
-
 What to notice:
-1) The top result should show source=official
-2) The retrieved guidance should not suggest disabling MFA
-3) This simulates a normal RAG system with clean data
 
-### Step 2: Poison the index (add an injected document)
-Run:
+Top result has source=official
+
+Guidance does not suggest disabling MFA
+
+Step 2: Poison the Index
+bash
+Copy code
 python3 ingest.py --kb ../kb --inject ../injected --index ../index_poisoned.json
 python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA is failing?"
-
 What to notice:
-1) An source=untrusted chunk may now rank #1
-2) The “assistant response” changes because the retrieved context changed
-3) This is data poisoning at the knowledge base / ingestion layer (not model hacking)
 
-### Step 3: Apply a basic mitigation (trusted-only retrieval)
-Run:
+A source=untrusted document may rank highest
+
+The assistant response changes due to altered context
+
+This is data poisoning at the ingestion layer
+
+Step 3: Apply a Mitigation
+bash
+Copy code
 python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA is failing?" --trusted-only
-
 What to notice:
-1) Untrusted content is filtered out during retrieval
-2) The top results should return to source=official
-3) The response becomes safe again because the context becomes safe again
 
-### Step 4: Try one more query (optional)
-Try:
-python3 query.py --index ../index_poisoned.json --q "Can we disable MFA temporarily for VPN?" 
+Untrusted content is filtered out
 
-Then run the same query with:
+Top result returns to source=official
+
+The response becomes safe again
+
+Task 6: Optional Exploration
+Try querying:
+
+bash
+Copy code
+python3 query.py --index ../index_poisoned.json --q "Can we disable MFA temporarily for VPN?"
+Then repeat with:
+
+bash
+Copy code
 python3 query.py --index ../index_poisoned.json --q "Can we disable MFA temporarily for VPN?" --trusted-only
+Task 7: Check Your Understanding
+Where did the attacker intervene to influence the assistant’s answers?
 
-What to notice:
-1) The poisoned index tends to “prefer” the injected document for sensitive queries
-2) The mitigation reduces this behavior by removing untrusted sources
+Why did the injected document rank higher for some queries?
 
-## Task 5: Check Your Understanding
-1) In this room, where did the attacker intervene to influence the assistant’s answers?
-2) Why did the injected document rank higher for some VPN/MFA queries?
-3) Name one red flag that suggests retrieved context is untrustworthy.
-4) Name two mitigations that reduce RAG poisoning risk.
-5) What did the `--trusted-only` flag simulate?
+What is one indicator that retrieved context is untrusted?
+
+Name two mitigations that reduce RAG poisoning risk.
+
+What does the --trusted-only flag simulate?
+
+Room Summary
+This room demonstrated how RAG systems can be compromised through data poisoning and how basic trust-based controls can significantly reduce risk.
