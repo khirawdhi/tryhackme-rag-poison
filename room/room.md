@@ -2,6 +2,20 @@
 
 # RAG Data Poisoning: When Knowledge Bases Lie
 
+## Task 0: Introduction and Setup
+
+In this room, you will explore how **Retrieval-Augmented Generation (RAG)** systems can be manipulated through **data poisoning** at the knowledge base layer.
+
+You are **not expected** to have prior experience with AI security or RAG systems.
+If you understand basic command-line usage and Python scripts, that is sufficient.
+
+### What you need
+- A Linux environment (local VM is sufficient)
+- Python 3 installed
+- No GPU or large model downloads required
+
+This room focuses on **conceptual understanding and practical observation**, not deep machine learning implementation.
+
 ## Task 1: Learning Objectives
 
 In this room, you will learn how:
@@ -104,5 +118,6 @@ Then repeat with: python3 query.py --index ../index_poisoned.json --q "Can we di
 - Name two mitigations that reduce RAG poisoning risk.
 - What does the --trusted-only flag simulate?
 
-# Room Summary
-This room demonstrated how RAG systems can be compromised through data poisoning and how basic trust-based controls can significantly reduce risk.
+## Room Summary
+
+In this room, you observed how poisoning a RAG knowledge base can alter AI behavior and how simple trust-based controls can significantly reduce risk.
