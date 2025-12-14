@@ -1,90 +1,110 @@
+```markdown
 # RAG Data Poisoning: When Knowledge Bases Lie
 
-This repository demonstrates how **Retrieval-Augmented Generation (RAG)** systems can be manipulated through **data poisoning at the knowledge base ingestion layer**, and how simple mitigations can reduce risk.
+This repository demonstrates how **Retrieval-Augmented Generation (RAG)** systems can be compromised through **data poisoning at the knowledge base ingestion layer**, and how simple trust-based mitigations can reduce this risk.
 
-The project is designed as a **hands-on security lab**.
+## What This Project Is About
 
-## Learning Objectives
+Many modern AI assistants rely on RAG pipelines to retrieve internal documents before generating answers.   While this improves accuracy, it also introduces a critical attack surface: **the retrieval layer**.
 
-By completing this lab, you will:
+This lab shows that:
+- The language model itself does **not** need to be hacked
+- Poisoning the **knowledge base** is sufficient to manipulate responses
+- Unsafe guidance can emerge purely from untrusted retrieved context
+- Simple retrieval-time controls can significantly reduce risk
 
-- Understand how RAG systems retrieve and use external data
-- Observe how poisoned documents influence AI-generated responses
-- Identify indicators of untrusted or malicious retrieved content
-- Apply a basic mitigation to reduce RAG data poisoning risk
+## Learning Outcomes
 
-## Scenario Overview
+After completing this lab, you will understand:
 
-- An internal AI assistant is used to answer IT and security questions for employees.
+- How RAG systems retrieve and use external documents
+- How malicious or untrusted documents influence AI-generated responses
+- What indicators suggest retrieved context is unsafe
+- How basic trust filtering mitigates RAG data poisoning
+
+##  Scenario Overview
+
+- An internal AI assistant answers IT and security questions for employees.
 - The assistant retrieves documents from a knowledge base before generating answers.
-- A contractor uploads a document that appears to be a legitimate policy update.
+- A contractor/Vendor uploads a document that appears to be a legitimate policy update.
 - After ingestion, the assistant begins suggesting **insecure actions**, such as bypassing MFA.
 
-This lab demonstrates that:
-> The **model itself is not hacked** — the **retrieved context is manipulated**.
+This project models that exact failure mode.
 
-##  RAG Technical Foundation
-
-Retrieval-Augmented Generation (RAG) works as follows:
-
-1. A user submits a query
-2. The system retrieves the most relevant documents
-3. Retrieved content is provided as context to the language model
-4. The model generates a response based on that context
-
-If malicious data enters the knowledge base, the model may confidently generate unsafe or misleading answers.
-
-## Project Structure
+## RAG Architecture Overview
 
 ![RAG Data Poisoning Pipeline](/room/img/rag_poisoning_pipeline.drawio.png)
 
-##  Hands-on Exercise: Poisoning the Retrieval
+## What the Lab Demonstrates
 
-You will compare the assistant’s behavior in three states:
+The hands-on exercise compares three system states:
 
-1. Clean knowledge base (trusted documents only)
-2. Poisoned knowledge base (trusted + injected document)
-3. Mitigated retrieval (trusted-only filter applied)
+1. **Clean retrieval**  
+   Only trusted documents are indexed.
 
-## Step 1: Build a Clean Index
+2. **Poisoned retrieval**  
+   A malicious document is injected during ingestion.
 
-cd ~/tryhackme-rag-poison/app
+3. **Mitigated retrieval**  
+   Untrusted sources are filtered during retrieval.
 
+The same user query produces **different answers** depending only on retrieved context.
+
+##  Mitigation Demonstrated
+
+The lab implements a simple but effective mitigation:
+
+- **Source-based trust filtering at query time**
+
+This simulates real-world defenses such as:
+- Trusted document allowlists
+- Segregated indexes
+- Retrieval-time policy enforcement
+
+## How to Run the Lab
+
+From the project root:
+
+```bash
+cd app
 python3 ingest.py --kb ../kb --index ../index_clean.json
-
 python3 query.py --index ../index_clean.json --q "How do I access VPN if MFA is failing?"
+````
 
-Expected behavior:
+Poison the knowledge base:
 
-Top result has source=official
-No suggestion to disable MFA. Represents a normal RAG system
-
-## Step 2: Poison the Index
-
+```bash
 python3 ingest.py --kb ../kb --inject ../injected --index ../index_poisoned.json
-
 python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA is failing?"
+```
 
-Expected behavior:
+Apply mitigation:
 
-A source=untrusted document may rank highest
-The assistant response changes due to altered retrieval context. This demonstrates data poisoning at ingestion time
-
-## Step 3: Apply a Basic Mitigation
-
+```bash
 python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA is failing?" --trusted-only
+```
 
-Expected behavior:
+## Learner Walkthrough
 
-Untrusted documents are excluded. Top result returns to source=official. Response becomes safe again
+For a **guided, task-based walkthrough**, including explanations and comprehension questions, see:
+
+```
+room/room.md
+```
 
 ## Key Security Takeaways
 
-- RAG systems inherit the trustworthiness of their data sources
-- The retrieval layer is a critical attack surface
-- Source attribution and trust filtering are essential
-- Simple mitigations can significantly reduce risk
+* RAG systems inherit the trustworthiness of their data sources
+* Knowledge base ingestion is a critical attack surface
+* Retrieval ranking can amplify malicious content
+* Trust controls are as important as model safeguards
 
-## Disclaimer
-This project is for educational and defensive security purposes only.
-Do not use these techniques on systems you do not own or have permission to test.
+##  Disclaimer
+
+This project is for **educational and defensive security purposes only**. Do not use these techniques on systems you do not own or have permission to test.
+
+---
+
+## Author
+
+Created as part of an **AI Security / RAG Threat Modeling exercise**.
