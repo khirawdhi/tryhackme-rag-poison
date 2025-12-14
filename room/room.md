@@ -44,6 +44,8 @@ LLM Response
 
 Data poisoning occurs at theingestion and retrieval layer, before generation.
 
+![RAG Data Poisoning Pipeline](img/rag_poisoning_pipeline.drawio.png)
+
 ## Task 5: Hands-on Exercise – Poisoning the Retrieval
 
 You will compare the assistant’s behavior in three states:
