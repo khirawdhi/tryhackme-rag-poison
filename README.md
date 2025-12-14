@@ -37,15 +37,15 @@ If malicious data enters the knowledge base, the model may confidently generate 
 ## Project Structure
 
 tryhackme-rag-poison/
-├── app/
-│ ├── ingest.py
-│ ├── query.py
-│ └── rag_core.py
-├── kb/ # Trusted knowledge base documents
-├── injected/ # Malicious / untrusted documents
-├── index_clean.json
-├── index_poisoned.json
-└── room/ # TryHackMe-style room content
+  app/
+    ingest.py
+    query.py
+    rag_core.py
+  kb/ # Trusted knowledge base documents
+    injected/ # Malicious / untrusted documents
+  index_clean.json
+  index_poisoned.json
+  room/ 
 
 
 ##  Hands-on Exercise: Poisoning the Retrieval
