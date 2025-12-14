@@ -56,9 +56,10 @@ You will compare the assistant’s behavior in three states:
 
 ### Step 1: Build a Clean Index
 
-
 cd ~/tryhackme-rag-poison/app
+
 python3 ingest.py --kb ../kb --index ../index_clean.json
+
 python3 query.py --index ../index_clean.json --q "How do I access VPN if MFA is failing?"
 
 What to notice:
@@ -70,6 +71,7 @@ Guidance does not suggest disabling MFA
 ### Step 2: Poison the Index
 
 python3 ingest.py --kb ../kb --inject ../injected --index ../index_poisoned.json
+
 python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA is failing?"
 
 What to notice:
