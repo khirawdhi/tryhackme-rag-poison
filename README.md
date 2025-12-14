@@ -36,16 +36,7 @@ If malicious data enters the knowledge base, the model may confidently generate 
 
 ## Project Structure
 
-tryhackme-rag-poison/
-  app/
-    ingest.py
-    query.py
-    rag_core.py
-  kb/ # Trusted knowledge base documents
-    injected/ # Malicious / untrusted documents
-  index_clean.json
-  index_poisoned.json
-  room/ 
+![RAG Data Poisoning Pipeline](img/rag_poisoning_pipeline.drawio.png)
 
 
 ##  Hands-on Exercise: Poisoning the Retrieval
