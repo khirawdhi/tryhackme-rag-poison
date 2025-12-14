@@ -1,9 +1,6 @@
 # `room.md` (TryHackMe room)
 
-```markdown
 # RAG Data Poisoning: When Knowledge Bases Lie
-
----
 
 ## Task 1: Learning Objectives
 
@@ -14,8 +11,6 @@ In this room, you will learn how:
 - Untrusted retrieved content can be identified
 - Simple mitigations can reduce RAG data poisoning risk
 
----
-
 ## Task 2: Scenario
 
 An internal AI assistant answers IT and security questions for employees.
@@ -25,20 +20,14 @@ The assistant retrieves documents from a knowledge base before generating respon
 A contractor uploads a document claiming to be a policy update.  
 After ingestion, the assistant begins suggesting insecure actions.
 
----
-
 ## Task 3: Technical Foundation
 
 Retrieval-Augmented Generation (RAG) systems combine:
 
-- **Retrieval** – selecting the most relevant documents
-- **Generation** – producing an answer using retrieved content
+- Retrieval – selecting the most relevant documents
+- Generation – producing an answer using retrieved content
 
-The language model treats retrieved documents as trusted context.
-
-If malicious data enters the knowledge base, answers can be manipulated without modifying the model.
-
----
+The language model treats retrieved documents as trusted context. If malicious data enters the knowledge base, answers can be manipulated without modifying the model.
 
 ## Task 4: RAG Pipeline Overview
 
@@ -53,9 +42,7 @@ Retrieved Context
 LLM Response
 
 
-Data poisoning occurs at the **ingestion and retrieval layer**, before generation.
-
----
+Data poisoning occurs at theingestion and retrieval layer, before generation.
 
 ## Task 5: Hands-on Exercise – Poisoning the Retrieval
 
@@ -67,57 +54,46 @@ You will compare the assistant’s behavior in three states:
 
 > Focus on which document ranks #1 and the `source=` field.
 
----
-
 ### Step 1: Build a Clean Index
 
-```bash
+
 cd ~/tryhackme-rag-poison/app
 python3 ingest.py --kb ../kb --index ../index_clean.json
 python3 query.py --index ../index_clean.json --q "How do I access VPN if MFA is failing?"
+
 What to notice:
 
 Top result has source=official
 
 Guidance does not suggest disabling MFA
 
-Step 2: Poison the Index
-bash
-Copy code
+### Step 2: Poison the Index
+
 python3 ingest.py --kb ../kb --inject ../injected --index ../index_poisoned.json
 python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA is failing?"
+
 What to notice:
 
 A source=untrusted document may rank highest
 
-The assistant response changes due to altered context
+The assistant response changes due to altered context This is data poisoning at the ingestion layer
 
-This is data poisoning at the ingestion layer
+### Step 3: Apply a Mitigation
 
-Step 3: Apply a Mitigation
-bash
-Copy code
 python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA is failing?" --trusted-only
+
 What to notice:
 
-Untrusted content is filtered out
+Untrusted content is filtered out. Top result returns to source=official The response becomes safe again
 
-Top result returns to source=official
+## Task 6: Optional Exploration
 
-The response becomes safe again
+Try querying: python3 query.py --index ../index_poisoned.json --q "Can we disable MFA temporarily for VPN?"
 
-Task 6: Optional Exploration
-Try querying:
+Then repeat with: python3 query.py --index ../index_poisoned.json --q "Can we disable MFA temporarily for VPN?" --trusted-only
 
-bash
-Copy code
-python3 query.py --index ../index_poisoned.json --q "Can we disable MFA temporarily for VPN?"
-Then repeat with:
+## Task 7: Check Your Understanding
 
-bash
-Copy code
-python3 query.py --index ../index_poisoned.json --q "Can we disable MFA temporarily for VPN?" --trusted-only
-Task 7: Check Your Understanding
 Where did the attacker intervene to influence the assistant’s answers?
 
 Why did the injected document rank higher for some queries?
