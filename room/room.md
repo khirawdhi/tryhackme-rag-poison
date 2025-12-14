@@ -94,15 +94,11 @@ Then repeat with: python3 query.py --index ../index_poisoned.json --q "Can we di
 
 ## Task 7: Check Your Understanding
 
-Where did the attacker intervene to influence the assistant’s answers?
+- Where did the attacker intervene to influence the assistant’s answers?
+- Why did the injected document rank higher for some queries?
+- What is one indicator that retrieved context is untrusted?
+- Name two mitigations that reduce RAG poisoning risk.
+- What does the --trusted-only flag simulate?
 
-Why did the injected document rank higher for some queries?
-
-What is one indicator that retrieved context is untrusted?
-
-Name two mitigations that reduce RAG poisoning risk.
-
-What does the --trusted-only flag simulate?
-
-Room Summary
+# Room Summary
 This room demonstrated how RAG systems can be compromised through data poisoning and how basic trust-based controls can significantly reduce risk.
