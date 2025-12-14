@@ -27,19 +27,17 @@ In this room, you will learn how:
 
 ## Task 2: Scenario
 
-An internal AI assistant answers IT and security questions for employees.
-
-The assistant retrieves documents from a knowledge base before generating responses.
-
-A contractor uploads a document claiming to be a policy update.  
-After ingestion, the assistant begins suggesting insecure actions.
+- An internal AI assistant answers IT and security questions for employees.
+- The assistant retrieves documents from a knowledge base before generating responses.
+- A contractor/Vendor(or compromised account) uploads a document claiming to be a policy update.
+- After ingestion, the assistant begins suggesting insecure actions.
 
 ## Task 3: Technical Foundation
 
 Retrieval-Augmented Generation (RAG) systems combine:
 
-- Retrieval – selecting the most relevant documents
-- Generation – producing an answer using retrieved content
+- Retrieval: selecting the most relevant documents
+- Generation: producing an answer using retrieved content
 
 The language model treats retrieved documents as trusted context. If malicious data enters the knowledge base, answers can be manipulated without modifying the model.
 
@@ -72,11 +70,13 @@ You will compare the assistant’s behavior in three states:
 
 ### Step 1: Build a Clean Index
 
+```bash
 cd ~/tryhackme-rag-poison/app
 
 python3 ingest.py --kb ../kb --index ../index_clean.json
 
 python3 query.py --index ../index_clean.json --q "How do I access VPN if MFA is failing?"
+```
 
 What to notice:
 
@@ -86,9 +86,11 @@ Guidance does not suggest disabling MFA
 
 ### Step 2: Poison the Index
 
+```bash
 python3 ingest.py --kb ../kb --inject ../injected --index ../index_poisoned.json
 
 python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA is failing?"
+```
 
 What to notice:
 
@@ -98,7 +100,9 @@ The assistant response changes due to altered context This is data poisoning at 
 
 ### Step 3: Apply a Mitigation
 
+```bash
 python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA is failing?" --trusted-only
+```
 
 What to notice:
 
@@ -106,9 +110,16 @@ Untrusted content is filtered out. Top result returns to source=official The res
 
 ## Task 6: Optional Exploration
 
-Try querying: python3 query.py --index ../index_poisoned.json --q "Can we disable MFA temporarily for VPN?"
+Try querying: 
+```bash
+python3 query.py --index ../index_poisoned.json --q "Can we disable MFA temporarily for VPN?"
+```
 
-Then repeat with: python3 query.py --index ../index_poisoned.json --q "Can we disable MFA temporarily for VPN?" --trusted-only
+Then repeat with: 
+
+```bash
+python3 query.py --index ../index_poisoned.json --q "Can we disable MFA temporarily for VPN?" --trusted-only
+```
 
 ## Task 7: Check Your Understanding
 
