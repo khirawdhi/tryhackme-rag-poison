@@ -1,4 +1,4 @@
-# `room.md` (TryHackMe room)
+# `room.md`
 
 # RAG Data Poisoning: When Knowledge Bases Lie
 
