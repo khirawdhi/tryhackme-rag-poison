@@ -102,8 +102,6 @@ room/room.md
 
 This project is for **educational and defensive security purposes only**. Do not use these techniques on systems you do not own or have permission to test.
 
----
-
 ## Author
 
 Created as part of an **AI Security / RAG Threat Modeling exercise**.
