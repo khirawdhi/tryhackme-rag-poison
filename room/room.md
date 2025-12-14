@@ -10,6 +10,7 @@ You are **not expected** to have prior experience with AI security or RAG system
 If you understand basic command-line usage and Python scripts, that is sufficient.
 
 ### What you need
+
 - A Linux environment (local VM is sufficient)
 - Python 3 installed
 - No GPU or large model downloads required
@@ -29,34 +30,35 @@ In this room, you will learn how:
 
 - An internal AI assistant answers IT and security questions for employees.
 - The assistant retrieves documents from a knowledge base before generating responses.
-- A contractor/Vendor(or compromised account) uploads a document claiming to be a policy update.
+- A contractor, vendor, or compromised account uploads a document claiming to be a policy update.
 - After ingestion, the assistant begins suggesting insecure actions.
 
 ## Task 3: Technical Foundation
 
-Retrieval-Augmented Generation (RAG) systems combine:
+Retrieval-Augmented Generation (RAG) is a technique where an AI system retrieves relevant documents from a knowledge base before generating a response.
 
-- Retrieval: selecting the most relevant documents
-- Generation: producing an answer using retrieved content
+Instead of answering only from what it was trained on, the model relies on retrieved documents as trusted context.
 
-The language model treats retrieved documents as trusted context. If malicious data enters the knowledge base, answers can be manipulated without modifying the model.
+If those documents are incorrect or malicious, the model can produce unsafe or misleading answers even though the model itself is unchanged.
 
 ## Task 4: RAG Pipeline Overview
 
 The RAG pipeline follows this flow:
 
 User Query
-↓
+   ↓
 Document Retrieval (Top-K)
-↓
+   ↓
 Retrieved Context
-↓
+   ↓
 LLM Response
 
 
-Data poisoning occurs at theingestion and retrieval layer, before generation.
+Data poisoning occurs at the ingestion and retrieval layer, before generation.
+
 
 ![RAG Data Poisoning Pipeline](img/rag_poisoning_pipeline.drawio.png)
+
 
 ## Task 5: Hands-on Exercise – Poisoning the Retrieval
 
@@ -80,9 +82,8 @@ python3 query.py --index ../index_clean.json --q "How do I access VPN if MFA is 
 
 What to notice:
 
-Top result has source=official
-
-Guidance does not suggest disabling MFA
+- Top result has source=official
+- Guidance does not suggest disabling MFA
 
 ### Step 2: Poison the Index
 
@@ -94,9 +95,9 @@ python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA 
 
 What to notice:
 
-A source=untrusted document may rank highest
-
-The assistant response changes due to altered context This is data poisoning at the ingestion layer
+- A source=untrusted document may rank highest
+- The assistant response changes due to altered context.
+- This is data poisoning at the ingestion layer
 
 ### Step 3: Apply a Mitigation
 
@@ -106,7 +107,9 @@ python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA 
 
 What to notice:
 
-Untrusted content is filtered out. Top result returns to source=official The response becomes safe again
+- Untrusted content is filtered out.
+- Top result returns to source=official
+- The response becomes safe again
 
 ## Task 6: Optional Exploration
 
