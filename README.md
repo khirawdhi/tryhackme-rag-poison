@@ -36,8 +36,7 @@ If malicious data enters the knowledge base, the model may confidently generate 
 
 ## Project Structure
 
-![RAG Data Poisoning Pipeline](/img/rag_poisoning_pipeline.drawio.png)
-
+![RAG Data Poisoning Pipeline](/room/img/rag_poisoning_pipeline.drawio.png)
 
 ##  Hands-on Exercise: Poisoning the Retrieval
 
