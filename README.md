@@ -1,4 +1,3 @@
-```markdown
 # RAG Data Poisoning: When Knowledge Bases Lie
 
 This repository demonstrates how **Retrieval-Augmented Generation (RAG)** systems can be compromised through **data poisoning at the knowledge base ingestion layer**, and how simple trust-based mitigations can reduce this risk.
@@ -69,7 +68,7 @@ From the project root:
 cd app
 python3 ingest.py --kb ../kb --index ../index_clean.json
 python3 query.py --index ../index_clean.json --q "How do I access VPN if MFA is failing?"
-````
+```
 
 Poison the knowledge base:
 
