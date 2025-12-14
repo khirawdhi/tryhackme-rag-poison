@@ -36,7 +36,7 @@ If malicious data enters the knowledge base, the model may confidently generate 
 
 ## Project Structure
 
-![RAG Data Poisoning Pipeline](img/rag_poisoning_pipeline.drawio.png)
+![RAG Data Poisoning Pipeline](/img/rag_poisoning_pipeline.drawio.png)
 
 
 ##  Hands-on Exercise: Poisoning the Retrieval
@@ -49,33 +49,32 @@ You will compare the assistant’s behavior in three states:
 
 ## Step 1: Build a Clean Index
 
-```bash
 cd ~/tryhackme-rag-poison/app
+
 python3 ingest.py --kb ../kb --index ../index_clean.json
+
 python3 query.py --index ../index_clean.json --q "How do I access VPN if MFA is failing?"
+
 Expected behavior:
 
 Top result has source=official
-
 No suggestion to disable MFA. Represents a normal RAG system
 
 ## Step 2: Poison the Index
 
-bash
-Copy code
 python3 ingest.py --kb ../kb --inject ../injected --index ../index_poisoned.json
+
 python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA is failing?"
+
 Expected behavior:
 
 A source=untrusted document may rank highest
-
 The assistant response changes due to altered retrieval context. This demonstrates data poisoning at ingestion time
 
 ## Step 3: Apply a Basic Mitigation
 
-bash
-Copy code
 python3 query.py --index ../index_poisoned.json --q "How do I access VPN if MFA is failing?" --trusted-only
+
 Expected behavior:
 
 Untrusted documents are excluded. Top result returns to source=official. Response becomes safe again
